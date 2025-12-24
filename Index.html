@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Please wait, redirecting...</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const step = params.get("step");
+    const sid = params.get("sid");
+
+    // STEP 1: PRE-PAYMENT
+    if (step === "pay") {
+      if (sid) {
+        localStorage.setItem("ig_sid", sid);
+      }
+
+      // Cashfree payment link
+      window.location.href =
+        "https://payments.cashfree.com/links?code=M9ma1rh09lo0_AAAAAAARVvU";
+    }
+
+    // STEP 2: POST-PAYMENT → BOOKING
+    else if (step === "book") {
+      const storedSid = localStorage.getItem("ig_sid");
+
+      let bookingUrl = "https://cal.com/vamsivk/test";
+
+      if (storedSid) {
+        bookingUrl += "?ig_sid=" + storedSid;
+      }
+
+      window.location.href = bookingUrl;
+    }
+
+    // SAFETY FALLBACK
+    else {
+      document.body.innerText = "Invalid redirect step.";
+    }
+  </script>
+</body>
+</html>
